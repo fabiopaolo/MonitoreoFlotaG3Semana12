@@ -6,8 +6,10 @@ import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -33,6 +35,63 @@ public class Ventana extends Application {
         stage.setHeight(700);
         stage.show();
 
+
+
+
+
+
+
+
+
+        // create a JavaFX scene with a stack pane as the root node and add it to the scene
+        BorderPane stackPane = new BorderPane();
+        Scene scene = new Scene(stackPane);
+        stage.setScene(scene);
+
+
+        Button botonCamionRuta = new Button("Right");
+        botonCamionRuta.setText("botonCamionRuta");
+        BorderPane.setAlignment(botonCamionRuta, Pos.CENTER_LEFT );
+
+        Button botonMotoRuta = new Button("Left");
+        botonMotoRuta.setText("botonMotoRuta");
+        BorderPane.setAlignment(botonMotoRuta, Pos.CENTER_RIGHT );
+
+        stackPane.setLeft(botonCamionRuta);
+        stackPane.setRight(botonMotoRuta);
+
+
+        botonCamionRuta.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // stage.hide();
+                ventanaCamionRuta();
+                // stage.show();
+            }
+        });
+        
+        botonMotoRuta.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // stage.hide();
+                ventanaMotoRuta();
+                // stage.show();
+            }
+        });
+
+    }
+
+    public void ventanaCamionRuta() {
+
+        Stage stage = new Stage();
+
+
+
+        stage.setTitle("Sistema de Monitoreo de Vehiculos");
+        stage.setWidth(800);
+        stage.setHeight(700);
+        stage.show();
+
         // create a JavaFX scene with a stack pane as the root node and add it to the scene
         StackPane stackPane = new StackPane();
         Scene scene = new Scene(stackPane);
@@ -49,18 +108,6 @@ public class Ventana extends Application {
         //stackPane.getChildren().add(mapaBase.getMapView());
         FachadaMapa facade = new FachadaMapa();
         mapaBase = facade.mostrarMapa(stackPane);
-
-        Button btnNuevo = new Button();
-        btnNuevo.setText("Nuevo");
-        btnNuevo.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // stage.hide();
-                muestraNuevaVentana();
-            }
-        });
-
-        stackPane.getChildren().add(btnNuevo);
 
 
 
@@ -109,21 +156,116 @@ public class Ventana extends Application {
         }
         System.out.println();
 
+
+
+
+
+
+
+
+        // Stage stage = new Stage();
+        // StackPane stackPane = new StackPane();
+        // Scene scene = new Scene(stackPane);
+        // stage.setScene(scene);
+
+        // //  Clonacion de MapaBase
+        // Mapa mapaBase2 = (Mapa)mapaBase.copiar();
+
+        // mapaBase2.imprimeCoordenadasActual();
+        // stackPane.getChildren().add(mapaBase2.getMapView());
+
+        // stage.show();
     }
 
-    public void muestraNuevaVentana() {
+    public void ventanaMotoRuta() {
+
         Stage stage = new Stage();
+
+
+
+        stage.setTitle("Sistema de Monitoreo de Vehiculos");
+        stage.setWidth(800);
+        stage.setHeight(700);
+        stage.show();
+
+        // create a JavaFX scene with a stack pane as the root node and add it to the scene
         StackPane stackPane = new StackPane();
         Scene scene = new Scene(stackPane);
         stage.setScene(scene);
 
-        //  Clonacion de MapaBase
-        Mapa mapaBase2 = (Mapa)mapaBase.copiar();
+        // create a MapView to display the map and add it to the stack pane
+        /*
+        this.mapaBase = new Mapa();
+        this.mapaBase.imprimeCoordenadasActual();
+        stackPane.getChildren().add(this.mapaBase.getMapView());
+        */
+        //mapaBase = new Mapa();
+        //mapaBase.imprimeCoordenadasActual();
+        //stackPane.getChildren().add(mapaBase.getMapView());
+        FachadaMapa facade = new FachadaMapa();
+        mapaBase = facade.mostrarMapa(stackPane);
 
-        mapaBase2.imprimeCoordenadasActual();
-        stackPane.getChildren().add(mapaBase2.getMapView());
 
-        stage.show();
+
+        // create a graphics overlay for displaying different geometries as graphics
+        GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+        mapaBase.getMapView().getGraphicsOverlays().add(graphicsOverlay);
+
+        // create a point geometry
+        Point point = new Point(-77.0844, -12.0561, SpatialReferences.getWgs84());
+        Graphic pointGraphic = new Graphic(point, new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.DIAMOND, 0xFF0000FF, 14));
+
+        graphicsOverlay.getGraphics().addAll(Arrays.asList(pointGraphic));
+        //graphicsOverlay.getGraphics().remove(point);
+        //stackPane.getChildren().addAll(mapaBase.getMapView());
+
+
+
+        /* Context */
+
+        Context context = new Context();
+        // context.setStrategy(new CamionRutaStrategy());
+        context.setStrategy(new MotoRutaStrategy());
+        Ruta ruta = context.crearRuta();
+
+
+        PointCollection polylinePoints = new PointCollection(SpatialReferences.getWgs84());
+
+        polylinePoints.addAll(ruta.getPoints());
+
+        Polyline polyline = new Polyline(polylinePoints);
+        SimpleLineSymbol polylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, 0xFF00FF00, 3.0f);
+        Graphic polylineGraphic = new Graphic(polyline, polylineSymbol);
+        graphicsOverlay.getGraphics().add(polylineGraphic);
+
+
+        JSONExportVisitor jsonVisitor = new JSONExportVisitor();
+        for (Punto punto : ruta.getPuntos()){
+            punto.accept(jsonVisitor);
+        }
+        
+        System.out.println("\n\t\t\tPutnos en formato XML\n");
+        
+        XMLExportVisitor xmlVisitor = new XMLExportVisitor();
+        for (Punto punto : ruta.getPuntos()){
+            punto.accept(xmlVisitor);
+        }
+        System.out.println();
+
+
+
+
+
+
+
+        // //  Clonacion de MapaBase
+        // Mapa mapaBase2 = (Mapa)mapaBase.copiar();
+
+        // mapaBase2.imprimeCoordenadasActual();
+        // stackPane.getChildren().add(mapaBase2.getMapView());
+
+        // stage.show();
+
     }
 
 }
