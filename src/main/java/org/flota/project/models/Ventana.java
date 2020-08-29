@@ -36,13 +36,6 @@ public class Ventana extends Application {
         stage.show();
 
 
-
-
-
-
-
-
-
         // create a JavaFX scene with a stack pane as the root node and add it to the scene
         BorderPane stackPane = new BorderPane();
         Scene scene = new Scene(stackPane);
@@ -50,11 +43,11 @@ public class Ventana extends Application {
 
 
         Button botonCamionRuta = new Button("Right");
-        botonCamionRuta.setText("botonCamionRuta");
+        botonCamionRuta.setText("Ruta de camion");
         BorderPane.setAlignment(botonCamionRuta, Pos.CENTER_LEFT );
 
         Button botonMotoRuta = new Button("Left");
-        botonMotoRuta.setText("botonMotoRuta");
+        botonMotoRuta.setText("Ruta de moto");
         BorderPane.setAlignment(botonMotoRuta, Pos.CENTER_RIGHT );
 
         stackPane.setLeft(botonCamionRuta);
