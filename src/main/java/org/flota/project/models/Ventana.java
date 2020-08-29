@@ -50,9 +50,13 @@ public class Ventana extends Application {
         botonMotoRuta.setText("Ruta de moto");
         BorderPane.setAlignment(botonMotoRuta, Pos.CENTER_RIGHT );
 
+        Button botonMinivanRuta = new Button("Center");
+        botonMinivanRuta.setText("Ruta de minivan");
+        BorderPane.setAlignment(botonMinivanRuta, Pos.CENTER);
+
         stackPane.setLeft(botonCamionRuta);
         stackPane.setRight(botonMotoRuta);
-
+        stackPane.setCenter(botonMinivanRuta);
 
         botonCamionRuta.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -63,6 +67,13 @@ public class Ventana extends Application {
             }
         });
         
+        botonMinivanRuta.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                ventanaMinivanRuta();
+            }
+        });
+
         botonMotoRuta.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -168,6 +179,93 @@ public class Ventana extends Application {
         // stackPane.getChildren().add(mapaBase2.getMapView());
 
         // stage.show();
+    }
+
+    public void ventanaMinivanRuta(){
+        Stage stage = new Stage();
+
+        stage.setTitle("Sistema de Monitoreo de Vehiculos");
+        stage.setWidth(800);
+        stage.setHeight(700);
+        stage.show();
+
+        // create a JavaFX scene with a stack pane as the root node and add it to the scene
+        StackPane stackPane = new StackPane();
+        Scene scene = new Scene(stackPane);
+        stage.setScene(scene);
+
+        // create a MapView to display the map and add it to the stack pane
+        /*
+        this.mapaBase = new Mapa();
+        this.mapaBase.imprimeCoordenadasActual();
+        stackPane.getChildren().add(this.mapaBase.getMapView());
+        */
+        //mapaBase = new Mapa();
+        //mapaBase.imprimeCoordenadasActual();
+        //stackPane.getChildren().add(mapaBase.getMapView());
+        FachadaMapa facade = new FachadaMapa();
+        mapaBase = facade.mostrarMapa(stackPane);
+
+
+
+        // create a graphics overlay for displaying different geometries as graphics
+        GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+        mapaBase.getMapView().getGraphicsOverlays().add(graphicsOverlay);
+
+        // create a point geometry
+        Point point = new Point(-77.0844, -12.0561, SpatialReferences.getWgs84());
+        Graphic pointGraphic = new Graphic(point, new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.DIAMOND, 0xFF0000FF, 14));
+
+        graphicsOverlay.getGraphics().addAll(Arrays.asList(pointGraphic));
+        //graphicsOverlay.getGraphics().remove(point);
+        //stackPane.getChildren().addAll(mapaBase.getMapView());
+
+
+
+        /* Context */
+
+        Context context = new Context();
+        context.setStrategy(new MinivanRutaStrategy());
+        //context.setStrategy(new MotoRutaStrategy());
+        Ruta ruta = context.crearRuta();
+
+
+        PointCollection polylinePoints = new PointCollection(SpatialReferences.getWgs84());
+
+        polylinePoints.addAll(ruta.getPoints());
+
+        Polyline polyline = new Polyline(polylinePoints);
+        SimpleLineSymbol polylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, 0xFF00FF00, 3.0f);
+        Graphic polylineGraphic = new Graphic(polyline, polylineSymbol);
+        graphicsOverlay.getGraphics().add(polylineGraphic);
+
+
+        JSONExportVisitor jsonVisitor = new JSONExportVisitor();
+        for (Punto punto : ruta.getPuntos()){
+            punto.accept(jsonVisitor);
+        }
+        
+        System.out.println("\n\t\t\tPutnos en formato XML\n");
+        
+        XMLExportVisitor xmlVisitor = new XMLExportVisitor();
+        for (Punto punto : ruta.getPuntos()){
+            punto.accept(xmlVisitor);
+        }
+        System.out.println();
+
+        // Stage stage = new Stage();
+        // StackPane stackPane = new StackPane();
+        // Scene scene = new Scene(stackPane);
+        // stage.setScene(scene);
+
+        // //  Clonacion de MapaBase
+        // Mapa mapaBase2 = (Mapa)mapaBase.copiar();
+
+        // mapaBase2.imprimeCoordenadasActual();
+        // stackPane.getChildren().add(mapaBase2.getMapView());
+
+        // stage.show();
+
     }
 
     public void ventanaMotoRuta() {
