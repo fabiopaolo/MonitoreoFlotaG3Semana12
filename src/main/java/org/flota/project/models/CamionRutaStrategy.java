@@ -16,6 +16,7 @@ public class CamionRutaStrategy implements RutaStrategy {
         ruta.addPunto(new Despacho(-77.077908, -12.065964, "Calle Alfonso Ugarte", "Urgente", "7867521"));
         ruta.addPunto(new Despacho(-77.078538, -12.073385, "Teodoro Vargas", "Normal", "9043321"));
         ruta.addPunto(new Despacho(-77.081588, -12.077808, "Las Flores Sur", "Urgente", "54574321"));
+        ruta.addPunto(new PuntoFueraDeLinea(-77.081588, -12.065964,"ALMUERZO"));
         return ruta;
     }
 }

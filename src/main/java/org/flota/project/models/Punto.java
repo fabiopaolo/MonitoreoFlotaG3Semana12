@@ -18,6 +18,9 @@ public abstract class Punto {
     public Point getPoint(){
         return point;
     }
+    public String getUbicacion(){
+        return latitud+";"+longitud;
+    }
 
     public abstract void accept(Visitor visitor);
 

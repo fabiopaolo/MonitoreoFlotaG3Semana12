@@ -75,8 +75,7 @@ public class Ventana extends Application {
         //graphicsOverlay.getGraphics().remove(point);
         //stackPane.getChildren().addAll(mapaBase.getMapView());
 
-
-
+       
         /* Context */
 
         Context context = new Context();
@@ -84,7 +83,7 @@ public class Ventana extends Application {
         //context.setStrategy(new MotoRutaStrategy());
         Ruta ruta = context.crearRuta();
 
-
+        
         PointCollection polylinePoints = new PointCollection(SpatialReferences.getWgs84());
 
         polylinePoints.addAll(ruta.getPoints());
@@ -99,7 +98,12 @@ public class Ventana extends Application {
         for (Punto punto : ruta.getPuntos()){
             punto.accept(jsonVisitor);
         }
-
+       /* pregunta 3
+        PuntoFueraDeLinea puntoAlmuerzo = new PuntoFueraDeLinea(-77.0544, -12.0410, "almuerzo");
+        puntoAlmuerzo.accept(jsonVisitor);
+        System.out.println("punto de almeurzo: "+puntoAlmuerzo.getPoint().toString());
+        Graphic pointGraphic2 = new Graphic(puntoAlmuerzo.getPoint(), new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.TRIANGLE, 0xFF0000FF, 14));
+        graphicsOverlay.getGraphics().add(pointGraphic2);*/
     }
 
     public void muestraNuevaVentana() {

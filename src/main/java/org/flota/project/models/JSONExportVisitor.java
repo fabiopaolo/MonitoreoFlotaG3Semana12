@@ -26,4 +26,14 @@ public class JSONExportVisitor implements Visitor {
         System.out.println(json);
         return json;
     }
+
+    @Override
+    public Map<String, String> visitFueraDeLinea(PuntoFueraDeLinea fuera) {
+        Map<String, String> json = new HashMap <>();
+        json.put("Punto", fuera.getFuera());
+        json.put("Ubicacion", fuera.getUbicacion());
+        json.put("Motivo", fuera.getMotivo());
+        System.out.println(json);
+        return json;
+    }
 }
