@@ -55,6 +55,7 @@ public class Ventana extends Application {
         btnNuevo.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                // stage.hide();
                 muestraNuevaVentana();
             }
         });
@@ -99,6 +100,14 @@ public class Ventana extends Application {
         for (Punto punto : ruta.getPuntos()){
             punto.accept(jsonVisitor);
         }
+        
+        System.out.println("\n\t\t\tPutnos en formato XML\n");
+        
+        XMLExportVisitor xmlVisitor = new XMLExportVisitor();
+        for (Punto punto : ruta.getPuntos()){
+            punto.accept(xmlVisitor);
+        }
+        System.out.println();
 
     }
 

@@ -13,6 +13,7 @@ public class JSONExportVisitor implements Visitor {
         Map<String, String> json = new HashMap <>();
         json.put("comentarios", recojo.getComentarios());
         json.put("direccion", recojo.getDireccion());
+        json.put("visitRecojo", "visitRecojo");
         System.out.println(json);
         return json;
     }
@@ -23,6 +24,7 @@ public class JSONExportVisitor implements Visitor {
         json.put("comentarios", despacho.getComentarios());
         json.put("direccion", despacho.getDireccion());
         json.put("documento", despacho.getDocumento());
+        json.put("visitDespacho", "visitDespacho");
         System.out.println(json);
         return json;
     }
