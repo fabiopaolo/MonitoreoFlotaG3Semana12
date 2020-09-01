@@ -14,6 +14,7 @@ public class JSONExportVisitor implements Visitor {
         json.put("comentarios", recojo.getComentarios());
         json.put("direccion", recojo.getDireccion());
         json.put("visitRecojo", "visitRecojo");
+        json.put("peso", String.valueOf(recojo.getPesoPaquete()));
         System.out.println(json);
         return json;
     }
@@ -25,6 +26,7 @@ public class JSONExportVisitor implements Visitor {
         json.put("direccion", despacho.getDireccion());
         json.put("documento", despacho.getDocumento());
         json.put("visitDespacho", "visitDespacho");
+        json.put("peso", String.valueOf(despacho.getPesoPaquete()));
         System.out.println(json);
         return json;
     }

@@ -130,7 +130,12 @@ public class Ventana extends Application {
             context.setStrategy(new MotoRutaStrategy());
         }
 
-        Ruta ruta = context.crearRuta();
+        
+        double maxPesos = context.validarPeso();
+
+        int maxPuntos = context.maxPuntos();
+
+        Ruta ruta = context.crearRuta(maxPesos, maxPuntos);
 
 
         PointCollection polylinePoints = new PointCollection(SpatialReferences.getWgs84());
@@ -147,7 +152,7 @@ public class Ventana extends Application {
             punto.accept(jsonVisitor);
         }
         
-        System.out.println("\n\t\t\tPutnos en formato XML\n");
+        System.out.println("\n\t\t\tPuntos en formato XML\n");
         
         XMLExportVisitor xmlVisitor = new XMLExportVisitor();
         for (Punto punto : ruta.getPuntos()){

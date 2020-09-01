@@ -4,5 +4,9 @@ import org.flota.project.models.Ruta;
 
 
 public interface RutaStrategy {
-    Ruta crearRuta();
+    Ruta crearRuta(double maxPesos, int maxPuntos);
+
+    public Integer maximosPuntosParada();
+
+    public Double maximoPesoPermitido();
 }
