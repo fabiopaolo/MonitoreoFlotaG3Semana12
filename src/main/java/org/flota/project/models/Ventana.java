@@ -53,8 +53,19 @@ public class Ventana extends Application {
         botonMotoRuta.setText("botonMotoRuta");
         BorderPane.setAlignment(botonMotoRuta, Pos.CENTER_RIGHT );
 
+        //Problema 4
+        //Agrego el boton para ver la ruta de la minivan
+        Button botonMinivanRuta = new Button("Left");
+        botonMotoRuta.setText("botonMinivanRuta");
+        BorderPane.setAlignment(botonMotoRuta, Pos.CENTER );
+
+
+
         stackPane.setLeft(botonCamionRuta);
         stackPane.setRight(botonMotoRuta);
+        //Problema 4
+        stackPane.setCenter(botonMinivanRuta);
+        //stackPane.setRight(botonMinivanRuta);
 
 
         botonCamionRuta.setOnAction(new EventHandler<ActionEvent>() {
@@ -72,6 +83,18 @@ public class Ventana extends Application {
                 // stage.hide();
                 // ventanaMotoRuta();
                 ventanaRuta("moto");
+                // stage.show();
+            }
+        });
+
+
+        //Problema 4
+        /* */
+        botonMinivanRuta.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // stage.hide();
+                ventanaRuta("minivan");
                 // stage.show();
             }
         });
@@ -122,15 +145,24 @@ public class Ventana extends Application {
 
 
         /* Context */
-
+        /*agrego lo de minivan ruta strategy*/
         Context context = new Context();
         if(tipo == "camion"){
             context.setStrategy(new CamionRutaStrategy());
         }else if(tipo == "moto"){
             context.setStrategy(new MotoRutaStrategy());
         }
+        //Problema 4
+        else if(tipo == "minivan"){
+            context.setStrategy(new MinivanRutaStrategy());
+        }
 
-        Ruta ruta = context.crearRuta();
+        
+        double maxPesos = context.validarPeso();
+
+        int maxPuntos = context.maxPuntos();
+
+        Ruta ruta = context.crearRuta(maxPesos, maxPuntos);
 
 
         PointCollection polylinePoints = new PointCollection(SpatialReferences.getWgs84());
@@ -147,7 +179,7 @@ public class Ventana extends Application {
             punto.accept(jsonVisitor);
         }
         
-        System.out.println("\n\t\t\tPutnos en formato XML\n");
+        System.out.println("\n\t\t\tPuntos en formato XML\n");
         
         XMLExportVisitor xmlVisitor = new XMLExportVisitor();
         for (Punto punto : ruta.getPuntos()){
