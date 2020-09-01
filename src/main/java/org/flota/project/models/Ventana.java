@@ -53,7 +53,7 @@ public class Ventana extends Application {
         botonMotoRuta.setText("botonMotoRuta");
         BorderPane.setAlignment(botonMotoRuta, Pos.CENTER_RIGHT );
 
-        //Problema 4
+        //Problema 4.
         //Agrego el boton para ver la ruta de la minivan
         Button botonMinivanRuta = new Button("Left");
         botonMotoRuta.setText("botonMinivanRuta");
@@ -63,7 +63,7 @@ public class Ventana extends Application {
 
         stackPane.setLeft(botonCamionRuta);
         stackPane.setRight(botonMotoRuta);
-        //Problema 4
+        //Problema 4.
         stackPane.setCenter(botonMinivanRuta);
         //stackPane.setRight(botonMinivanRuta);
 
@@ -88,7 +88,7 @@ public class Ventana extends Application {
         });
 
 
-        //Problema 4
+        //Problema 4.
         /* */
         botonMinivanRuta.setOnAction(new EventHandler<ActionEvent>() {
             @Override
