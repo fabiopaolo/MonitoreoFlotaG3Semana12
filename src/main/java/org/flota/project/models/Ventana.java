@@ -154,7 +154,7 @@ public class Ventana extends Application {
             punto.accept(xmlVisitor);
         }
         System.out.println();
-
+        //hola XD
 
         // //  Clonacion de MapaBase
         // Mapa mapaBase2 = (Mapa)mapaBase.copiar();
